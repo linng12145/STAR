@@ -25,6 +25,13 @@ cd recovery_stage
 python train.py
 ```
 
+## test
+
+```python
+cd recovery_stage
+python test_TERI.py
+```
+
 ## demo
 
 ```python
