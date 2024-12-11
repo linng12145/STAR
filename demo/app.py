@@ -84,7 +84,7 @@ app.layout = html.Div([
     dcc.Store(id='cached-data'),  # Store for caching fetched data
     dcc.Store(id='mmsi-map', data=mmsi_options),  # 当前地图上展示的轨迹mmsi
     html.Header([
-        html.H2([html.Span("STAR: Spatio-Temporal Trajectory Recovery for Sparse and Uncertain Marine Trajectories")], className='title'),
+        html.H2([html.Span("STAR Demo")], className='title', style={'fontSize': '2em'}),
     ], style={
         # 'backgroundColor': 'black',  # 顶部背景颜色
         'color': 'black',  # 字体颜色
@@ -97,8 +97,8 @@ app.layout = html.Div([
     html.Div([
         # Left column for input elements
         html.Div([
-            html.P('Select trajectory and click Search to get RMSE.', className='subtitle'),
-            html.Label('Selected Trajectory', htmlFor='trajectory-dropdown'),
+            html.P('Select trajectory and click Search to get RMSE.', className='subtitle', style={'fontSize': '1.2em'}),
+            html.Label('Selected Trajectory', htmlFor='trajectory-dropdown', style={'fontSize': '1.2em'}),
             dcc.Dropdown(
                 id='trajectory-dropdown',
                 options=mmsi_options,
@@ -224,7 +224,8 @@ app.layout = html.Div([
                     'backgroundColor': 'white',
                     'marginBottom': '10px',
                     'display': 'flex',  # 使用 flexbox 布局
-                    'alignItems': 'center'  # 垂直居中对齐
+                    'alignItems': 'center',  # 垂直居中对齐
+                    'fontSize': '1.4em',
                 }),
                 html.Div(children=[
                     'Recovered trajectories:',
@@ -236,8 +237,8 @@ app.layout = html.Div([
                          # 'display': 'inline-block'  # 使线条与文本在同一行
                      }),
                     html.Div(style={
-                         'width': '3px',  # 线条宽度
-                         'height': '3px',  # 线条高度
+                         'width': '4px',  # 线条宽度
+                         'height': '4px',  # 线条高度
                          'backgroundColor': 'red',  # 线条颜色
                          'margin-left': '0px',  # 线条与文字之间的间距o
                          # 'display': 'inline-block'  # 使线条与文本在同一行
@@ -250,8 +251,8 @@ app.layout = html.Div([
                          # 'display': 'inline-block'  # 使线条与文本在同一行
                      }),
                     html.Div(style={
-                         'width': '3px',  # 线条宽度
-                         'height': '3px',  # 线条高度
+                         'width': '4px',  # 线条宽度
+                         'height': '4px',  # 线条高度
                          'backgroundColor': 'red',  # 线条颜色
                          'margin-left': '0px',  # 线条与文字之间的间距
                          # 'display': 'inline-block'  # 使线条与文本在同一行
@@ -264,8 +265,8 @@ app.layout = html.Div([
                          # 'display': 'inline-block'  # 使线条与文本在同一行
                      }),
                     html.Div(style={
-                         'width': '3px',  # 线条宽度
-                         'height': '3px',  # 线条高度
+                         'width': '4px',  # 线条宽度
+                         'height': '4px',  # 线条高度
                          'backgroundColor': 'red',  # 线条颜色
                          'margin-left': '0px',  # 线条与文字之间的间距
                          # 'display': 'inline-block'  # 使线条与文本在同一行
@@ -278,8 +279,8 @@ app.layout = html.Div([
                          # 'display': 'inline-block'  # 使线条与文本在同一行
                      }),
                     html.Div(style={
-                         'width': '3px',  # 线条宽度
-                         'height': '3px',  # 线条高度
+                         'width': '4px',  # 线条宽度
+                         'height': '4px',  # 线条高度
                          'backgroundColor': 'red',  # 线条颜色
                          'margin-left': '0px',  # 线条与文字之间的间距
                          # 'display': 'inline-block'  # 使线条与文本在同一行
@@ -289,7 +290,7 @@ app.layout = html.Div([
                          'height': '2px',  # 线条高度
                          'backgroundColor': 'red',  # 线条颜色
                          'margin-left': '0px',  # 线条与文字之间的间距
-                         # 'display': 'inline-block'  # 使线条与文本在同一行
+                         # 'display': 'inline-block',  # 使线条与文本在同一行
                      })
                 ],
                 style={
@@ -301,7 +302,8 @@ app.layout = html.Div([
                     'backgroundColor': 'white',
                     'marginBottom': '10px',
                     'display': 'flex',  # 使用 flexbox 布局
-                    'alignItems': 'center'  # 垂直居中对齐
+                    'alignItems': 'center',  # 垂直居中对齐
+                    'fontSize': '1.4em',
                 })
             ], style={
                 'position': 'absolute',  # 定位为绝对位置
@@ -317,13 +319,6 @@ app.layout = html.Div([
         ], className='graph', style={'position': 'relative'})
     ], className='row'),
 ])
-
-def prepare_performance_info(df):
-    data_points = len(df)
-
-    return [
-        html.Div(f"Data points: {data_points}")
-    ]
 
 @app.callback(
     [Output('cached-data', 'data'),
@@ -362,10 +357,22 @@ def display_rmse_on_click(clickMap, clickMap_pred, clickPoint, clickPoint_pred, 
                 )
             ])
             fig.update_layout(
-                title="RMSE Comparison ",
-                xaxis_title="MMSI",
-                yaxis_title="RMSE",
-                template="plotly_white"
+                title=dict(
+                    text="RMSE Comparison",
+                    font=dict(size=24)  # 设置标题字体大小
+                ),
+                yaxis=dict(
+                    title=dict(
+                        text="RMSE",
+                        font=dict(size=18)  # 设置 Y 轴标题字体大小
+                    ),
+                    tickfont=dict(size=18)
+                ),
+                xaxis=dict(
+                    tickfont=dict(size=18)
+                ),
+                template="plotly_white",
+                bargap=0.6,  # 设置柱子之间的间隔为 0
             )
 
             return {
@@ -392,10 +399,22 @@ def display_rmse_on_click(clickMap, clickMap_pred, clickPoint, clickPoint_pred, 
                 )
             ])
             fig.update_layout(
-                title="RMSE Comparison Chart",
-                xaxis_title="MMSI",
-                yaxis_title="RMSE",
-                template="plotly_white"
+                title=dict(
+                    text="RMSE Comparison",
+                    font=dict(size=24)  # 设置标题字体大小
+                ),
+                yaxis=dict(
+                    title=dict(
+                        text="RMSE",
+                        font=dict(size=18)  # 设置 Y 轴标题字体大小
+                    ),
+                    tickfont=dict(size=18)
+                ),
+                xaxis=dict(
+                    tickfont=dict(size=18)
+                ),
+                template="plotly_white",
+                bargap=0.6,  # 设置柱子之间的间隔为 0
             )
 
             return {
@@ -411,9 +430,20 @@ def display_rmse_on_click(clickMap, clickMap_pred, clickPoint, clickPoint_pred, 
         )
     ])
     fig.update_layout(
-        title="RMSE Comparison Chart",
-        xaxis_title="MMSI",
-        yaxis_title="RMSE",
+        title=dict(
+            text="RMSE Comparison",
+            font=dict(size=24)  # 设置标题字体大小
+        ),
+        yaxis=dict(
+            title=dict(
+                text="RMSE",
+                font=dict(size=18)  # 设置 Y 轴标题字体大小
+            ),
+            tickfont=dict(size=18)
+        ),
+        xaxis=dict(
+            tickfont=dict(size=18)
+        ),
         template="plotly_white",
         bargap=0.6,  # 设置柱子之间的间隔为 0
     )
@@ -423,7 +453,6 @@ def display_rmse_on_click(clickMap, clickMap_pred, clickPoint, clickPoint_pred, 
 
 @app.callback(
     [Output('map-display', 'children'),
-     Output("performance-info", "children"),
      Output('map', 'center'),
      Output('map', 'zoom')],
     [Input('cached-data', 'data'),
@@ -433,16 +462,14 @@ def display_rmse_on_click(clickMap, clickMap_pred, clickPoint, clickPoint_pred, 
 )
 def update_map(cached_data, overall_flag, current_center, current_zoom):
     if overall_flag is True:
-        return trajectory_lines + trajectory_points, '', current_center, current_zoom
+        return trajectory_lines + trajectory_points, current_center, current_zoom
     else:
         if not cached_data or 'data' not in cached_data or not cached_data['data']:
-            return trajectory_lines + trajectory_points, '', current_center, current_zoom
+            return trajectory_lines + trajectory_points, current_center, current_zoom
 
         print(f"Cache Key: {cached_data.get('cache_key')}")
         df = pd.DataFrame(cached_data['data'])
         mmsi = df['MMSI'].iloc[0]
-
-        performance_info = prepare_performance_info(df)
 
         selected_points = [
             dl.CircleMarker(
@@ -482,21 +509,12 @@ def update_map(cached_data, overall_flag, current_center, current_zoom):
                opacity=1,
                n_clicks=0  # 允许点击
             )
-        # ] + [
-        #     dl.Polyline(
-        #        id={'type': 'Path', 'mmsi': str(mmsi)},  # 动态设置 id
-        #        positions=list(zip(df['LAT_Label'], df['LON_Label'])),
-        #        color="black",  # 预测轨迹颜色
-        #        weight=1,
-        #        opacity=0.8,
-        #        n_clicks=0  # 允许点击
-        #     )
         ]
         df_center = int(len(df)/2)
 
         new_center = [df['LAT_Label'].iloc[df_center], df['LON_Label'].iloc[df_center]]
         new_zoom=14
-        return selected_trajectory + selected_points, html.Div(performance_info, className='info'), new_center, current_zoom
+        return selected_trajectory + selected_points, new_center, current_zoom
 
 
 
